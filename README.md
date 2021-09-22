@@ -29,5 +29,5 @@ The preprocess contains two stage:
 1. Resample: use `data_process/Resample_data.py`
 2. Normalization: use `data_process/Normalize_data.py`
 ## Training
-Use `train/train_position.py`
+Use `train/train_position.py`.
 The config is in `config`, containing 4 files for coarse/fine & pancreas/han dataset.

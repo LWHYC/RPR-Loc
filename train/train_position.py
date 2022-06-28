@@ -8,32 +8,21 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import time
 import torch.optim as optim
-import torch.tensor
 import torch.backends.cudnn as cudnn
 import torch.nn as nn
 from torchvision import transforms
 from dataloaders.Position_dataloader import *
 from torch.utils.data import DataLoader
-from util.train_test_func import *
+from torch.utils.tensorboard import SummaryWriter
 from util.parse_config import parse_config
 from networks.NetFactory import NetFactory
-from losses.loss_function import TestDiceLoss, AttentionExpDiceLoss
-from util.visualization.visualize_loss import loss_visualize
-from prefetch_generator import BackgroundGenerator
 
-class DataLoaderX(DataLoader):
-    def __iter__(self):
-        return BackgroundGenerator(super().__iter__())
 
 def random_all(random_seed):
     random.seed(random_seed)
     np.random.seed(random_seed)
     torch.manual_seed(random_seed)
     torch.cuda.manual_seed(random_seed)
-
-def extend_dimension(label,predic):
-    for i in range(predic.shape[1]):
-        one_pred = torch.ones_like(predic)
 
 
 def train(config_file):
@@ -43,10 +32,9 @@ def train(config_file):
     config_data  = config['data']   
     config_pnet  = config['pnetwork'] 
     config_train = config['training']
-
+    
     patch_size = config_data['patch_size']
     batch_size = config_data.get('batch_size', 4)
-    class_num   = config_pnet['class_num']
     cur_loss = 0
     lr = config_train.get('learning_rate', 1e-3)
     best_loss = config_train.get('best_loss', 0.5)
@@ -54,9 +42,11 @@ def train(config_file):
     small_move = config_train.get('small_move', False)
     fluct_range = config_train.get('fluct_range')
     num_worker = config_train.get('num_worker')
+    os.environ['CUDA_VISIBLE_DEVICES']= config_train.get('device_ids')
     random_all(random_seed)  
     random_crop = RandomPositionDoubleCrop(patch_size, small_move=small_move, fluct_range=fluct_range)
     to_tensor = ToPositionTensor()
+    writer = SummaryWriter()
 
     cudnn.benchmark = True
     cudnn.deterministic = True
@@ -64,16 +54,20 @@ def train(config_file):
     # 2, load data
     print('2.Load data')
     trainData = PositionDataloader(config=config_data,
-                                   split='train',
+                                   image_list=config_data['train_image_list'],
                                    transform=transforms.Compose([
                                        RandomPositionDoubleCrop(patch_size, small_move=small_move, fluct_range=fluct_range),
                                        ToPositionTensor(),
-                                   ]))
+                                   ]),
+                                   load_memory=config_train['load_memory'],
+                                   random_sample=True)
     validData = PositionDataloader(config=config_data,
-                                   split='valid',
-                                   transform=None)
-    trainLoader = DataLoaderX(trainData, batch_size=batch_size, shuffle=True, num_workers=num_worker, pin_memory=True)
-    validLoader = DataLoaderX(validData, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
+                                   image_list=config_data['valid_image_list'],
+                                   transform=None,
+                                   load_memory=config_train['load_memory'],
+                                   random_sample=False)
+    trainLoader = DataLoader(trainData, batch_size=batch_size, shuffle=True, num_workers=num_worker, pin_memory=True)
+    validLoader = DataLoader(validData, batch_size=1, shuffle=False, num_workers=1, pin_memory=True)
 
     # 3. creat model
     print('3.Creat model')
@@ -85,10 +79,8 @@ def train(config_file):
                     base_chns= config_pnet.get('base_feature_number', 16),
                     norm='in',
                     depth=config_pnet.get('depth', False),
-                    dilation=config_pnet.get('dilation', 1),
                     patch_size=patch_size,
                     n_classes = config_pnet['class_num'],
-                    droprate=config_pnet.get('drop_rate', 0.2)
                     )
     pnet = torch.nn.DataParallel(pnet).cuda()
     if config_train['load_weight']:
@@ -96,15 +88,13 @@ def train(config_file):
         pnet.load_state_dict(pnet_weight)
 
     loss_func = nn.MSELoss()
-    show_loss = loss_visualize(class_num)
     Adamoptimizer = optim.Adam(pnet.parameters(), lr=lr, weight_decay=config_train.get('decay', 1e-7))
     Adamscheduler = torch.optim.lr_scheduler.StepLR(Adamoptimizer, step_size=5, gamma=0.9)
 
     # 4, start to train
     print('4.Start to train')
     start_it  = config_train.get('start_iteration', 0)
-    dice_save = {}
-    lr_retain_epoch = 0
+    print_iter = 0
     for epoch in range(start_it, config_train['maximal_epoch']): 
         print('#######epoch:', epoch)
         optimizer = Adamoptimizer
@@ -122,11 +112,14 @@ def train(config_file):
             optimizer.step() 
             if epoch%config_train['train_step']==0 and i_batch%config_train['print_step']==0:
                 train_loss = train_loss.cpu().data.numpy()
+                writer.add_scalar('Loss/train_loss', train_loss, print_iter)
+                print_iter+=1
                 if i_batch ==0:
                     train_loss_array=train_loss
                 else:
                     train_loss_array = np.append(train_loss_array, train_loss)
-                print('train batch:',i_batch,'train loss:', train_loss, '\npredic:', predic[0].cpu().data.numpy(), 'label:', label_batch[0].cpu().data.numpy())
+                print('train batch:',i_batch,'train loss:', train_loss, '\npredic:', \
+                        predic[0].cpu().data.numpy(), 'label:', label_batch[0].cpu().data.numpy())
         Adamscheduler.step()
         if  epoch % config_train['test_step']==0:
             with torch.no_grad():
@@ -149,10 +142,9 @@ def train(config_file):
                     print('valid batch:',ii_batch,' valid loss:', valid_loss)
 
             epoch_loss = {'valid_loss':valid_loss_array.mean(), 'train_loss':train_loss_array.mean()}
+            writer.add_scalar('Loss/valid_loss', valid_loss_array.mean(), epoch)
             t = time.strftime('%X %x %Z')
             print(t, 'epoch', epoch, 'loss:', epoch_loss)
-            show_loss.plot_loss(epoch, epoch_loss)
-            dice_save[epoch] = epoch_loss
 
             'save current model'
             if os.path.exists(config_train['pnet_save_name'] + "_cur_{0:}.pkl".format(cur_loss)):
@@ -170,6 +162,6 @@ def train(config_file):
 
 
 if __name__ == '__main__':
-    config_file = str('config/train_position_pancreas_coarse.txt')
+    config_file = str('../config/train/train_position_han_coarse.txt')
     assert(os.path.isfile(config_file))
     train(config_file)

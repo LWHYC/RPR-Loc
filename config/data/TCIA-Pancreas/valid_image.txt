@@ -1,0 +1,11 @@
+../data/TCIA-Pancreas/image/0051.nii.gz
+../data/TCIA-Pancreas/image/0052.nii.gz
+../data/TCIA-Pancreas/image/0053.nii.gz
+../data/TCIA-Pancreas/image/0054.nii.gz
+../data/TCIA-Pancreas/image/0055.nii.gz
+../data/TCIA-Pancreas/image/0056.nii.gz
+../data/TCIA-Pancreas/image/0057.nii.gz
+../data/TCIA-Pancreas/image/0058.nii.gz
+../data/TCIA-Pancreas/image/0059.nii.gz
+../data/TCIA-Pancreas/image/0060.nii.gz
+../data/TCIA-Pancreas/image/0061.nii.gz

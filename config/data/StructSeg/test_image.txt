@@ -1,0 +1,10 @@
+../data/StructSeg/image/46.nii.gz
+../data/StructSeg/image/47.nii.gz
+../data/StructSeg/image/48.nii.gz
+../data/StructSeg/image/49.nii.gz
+../data/StructSeg/image/5.nii.gz
+../data/StructSeg/image/50.nii.gz
+../data/StructSeg/image/6.nii.gz
+../data/StructSeg/image/7.nii.gz
+../data/StructSeg/image/8.nii.gz
+../data/StructSeg/image/9.nii.gz

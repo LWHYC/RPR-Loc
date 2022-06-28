@@ -1,0 +1,10 @@
+../data/StructSeg/label/46.nii.gz
+../data/StructSeg/label/47.nii.gz
+../data/StructSeg/label/48.nii.gz
+../data/StructSeg/label/49.nii.gz
+../data/StructSeg/label/5.nii.gz
+../data/StructSeg/label/50.nii.gz
+../data/StructSeg/label/6.nii.gz
+../data/StructSeg/label/7.nii.gz
+../data/StructSeg/label/8.nii.gz
+../data/StructSeg/label/9.nii.gz

@@ -1,7 +1,7 @@
 [data]
 train_image_list      = ../config/data/TCIA-Pancreas/train_image.txt
 valid_image_list      = ../config/data/TCIA-Pancreas/valid_image.txt
-iter_num              = 80
+iter_num              = 12000
 batch_size            = 6
 random_scale          = False
 random_rotate         = False

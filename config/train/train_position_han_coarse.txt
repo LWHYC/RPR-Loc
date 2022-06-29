@@ -4,13 +4,11 @@ valid_image_list      = ../config/data/StructSeg/valid_image.txt
 iter_num              = 12000
 batch_size            = 6
 patch_size            = [16, 64, 64]
-class_num             = 3
-output_feature        = False
+
 
 [pnetwork]
 net_type                = Pnet
 base_feature_number     = 16
-drop_rate               = 0.2
 dilation                = 1
 class_num               = 3
 input_channel           = 1

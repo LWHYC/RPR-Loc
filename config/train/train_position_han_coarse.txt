@@ -9,7 +9,7 @@ output_feature        = False
 
 [pnetwork]
 net_type                = Pnet
-base_feature_number     = 24
+base_feature_number     = 16
 drop_rate               = 0.2
 dilation                = 1
 class_num               = 3
@@ -23,7 +23,7 @@ learning_rate      = 1e-3
 decay              = 1e-4
 maximal_epoch      = 300
 start_iteration    = 0
-device_ids         = 3,
+device_ids         = 0,
 train_step         = 1
 test_step          = 1
 test_iter          = 25
@@ -31,7 +31,7 @@ print_step         = 40
 random_seed        = 133
 small_move         = False
 fluct_range        = [5,15,15]
-num_worker         = 48
+num_worker         = 16
 load_memory        = True
-pnet_save_name  = ../weights/Pnet/Pnet_24_han_coarse
+pnet_save_name  = ../weights/Pnet/Pnet_16_han_coarse
 best_loss          = 1000

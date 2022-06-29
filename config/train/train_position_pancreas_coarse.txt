@@ -6,15 +6,11 @@ batch_size            = 6
 random_scale          = False
 random_rotate         = False
 patch_size            = [48, 48, 48]
-class_num             = 3
-output_feature        = False
 
 [pnetwork]
 net_type                = Pnet_2
 base_feature_number     = 24
-drop_rate               = 0.2
 dilation                = 1
-slice_margin            = 3
 class_num               = 3
 input_channel           = 1
 distance_ratio          = 700

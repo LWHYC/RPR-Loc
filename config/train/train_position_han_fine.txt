@@ -1,7 +1,7 @@
 [data]
 train_image_list      = ../config/data/StructSeg/train_image.txt
 valid_image_list      = ../config/data/StructSeg/valid_image.txt
-iter_num              = 8000
+iter_num              = 12000
 batch_size            = 6
 patch_size            = [16, 64, 64]
 class_num             = 3
@@ -29,9 +29,9 @@ test_step          = 1
 test_iter          = 25
 print_step         = 40
 random_seed        = 133
-small_move         = True
+small_move         = False
 fluct_range        = [5,15,15]
-num_worker         = 12
+num_worker         = 16
 load_memory        = False
 pnet_save_name  = ../weights/Pnet/Pnet_16_han_fine
 best_loss          = 1000

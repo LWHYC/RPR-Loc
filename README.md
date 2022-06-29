@@ -8,7 +8,7 @@ The training config is in `config/train/`, containing 4 files for coarse/fine & 
 
 For example, you could `cd train` then run `python train_position.py ../config/train/train_position_pancreas_coarse.txt` to train a coarse RPR model for TCIA-Pancreas dataset.
 ## Citation
-If you use this code in your research, please cite our work:
+If you find this research useful, please consider citing our work:
 
     @inproceedings{lei2021contrastive,
     title={Contrastive learning of relative position regression for one-shot object localization in 3D medical images},

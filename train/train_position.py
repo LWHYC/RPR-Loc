@@ -162,6 +162,6 @@ def train(config_file):
 
 
 if __name__ == '__main__':
-    config_file = str(sys.argv[0]) # e.g. ../config/train/train_position_han_coarse.txt
+    config_file = str(sys.argv[1]) # e.g. ../config/train/train_position_han_coarse.txt
     assert(os.path.isfile(config_file))
     train(config_file)

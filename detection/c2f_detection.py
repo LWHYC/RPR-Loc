@@ -140,7 +140,6 @@ def test(config_file):#, label_wanted):
             Fine_RD.support_position /= support_volume_num
             
             for ii_batch, query_sample in enumerate(validLoader):
-                #try:
                     print(query_sample['image_path'])
                     query_sample['spacing'] = query_sample['spacing'].cpu().data.numpy().squeeze()
                     spacing = query_sample['spacing']
@@ -180,7 +179,6 @@ def test(config_file):#, label_wanted):
                         relative_cor_ls.append(relative_position)
                         cur_position += relative_position # [6,3]
                     predic_extreme_cor = cur_position.copy()/spacing
-                    #predic_corner_cor = transfer_multi_extremepoint_to_cornerpoint(predic_extreme_cor, point_per_slice=1, slice_range=1)
                     predic_corner_cor = np.asarray([np.min(predic_extreme_cor,axis=0),np.max(predic_extreme_cor, axis=0)])
                     pred_iou = iou(real_corner_cor,  predic_corner_cor)
                     pred_error = spacing*(real_corner_cor-predic_corner_cor) # 2*3
@@ -200,20 +198,6 @@ def test(config_file):#, label_wanted):
                             predicted_point_position = in_predic_extreme_cor[i]-patch_size//2
                             save_detection(support_img, query_img, support_point_position,query_point_position, \
                                         predicted_point_position, fname='results/{0:}_{1:}_{2:}_f.png'.format(idx, ii_batch, i))
-                # except:
-                #     print('Something goes wrong with:', query_sample['image_path'],'in class', label_wanted)
-                #     pass
-                    
-            # error_dis[-1]=np.asarray(error_dis[-1])
-            # fig,(ax0,ax1,ax2, ax3,ax4,ax5) = plt.subplots(nrows=6,figsize=(9,6)) 
-            # ax0.hist(error_dis[-1][:,0,0],10,histtype='bar',facecolor='yellowgreen',alpha=0.75)
-            # ax1.hist(error_dis[-1][:,0,1],10,histtype='bar',facecolor='pink',alpha=0.75)
-            # ax2.hist(error_dis[-1][:,0,2],10,histtype='bar',facecolor='red',alpha=0.75)
-            # ax3.hist(error_dis[-1][:,1,0],10,histtype='bar',facecolor='yellowgreen',alpha=0.75)
-            # ax4.hist(error_dis[-1][:,1,1],10,histtype='bar',facecolor='pink',alpha=0.75)
-            # ax5.hist(error_dis[-1][:,1,2],10,histtype='bar',facecolor='red',alpha=0.75)       
-            # fig.subplots_adjust(hspace=0.4)  
-            # plt.show()
             mean_iou = np.around(np.array(iou_ls).mean(), decimals=3)
             mean_error = np.around(np.abs(np.array(cor_error_ls)).mean(), decimals=2)
             mean_iou_ls.append(mean_iou)

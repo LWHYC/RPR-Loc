@@ -10,7 +10,6 @@ sys.path.insert(0, join(abspath(dirname(__file__)), 'src'))
 from scipy import ndimage
 import  numpy as np
 import matplotlib
-matplotlib.use('WebAgg')
 from data_process.data_process_func import *
 import torch
 import torch.nn as nn

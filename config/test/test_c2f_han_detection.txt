@@ -1,12 +1,12 @@
 [data]
-query_image_list      = /home/ps/leiwenhui/Code/RPR-Loc-main/config/data/StructSeg/test_image.txt
-query_label_list      = /home/ps/leiwenhui/Code/RPR-Loc-main/config/data/StructSeg/test_label.txt
-support_image_list    = /home/ps/leiwenhui/Code/RPR-Loc-main/config/data/StructSeg/valid_image.txt
-support_label_list    = /home/ps/leiwenhui/Code/RPR-Loc-main/config/data/StructSeg/valid_label.txt
-iter_num              = 4000
-batch_size            = 1
+query_image_list      = ../config/data/StructSeg/test_image.txt
+query_label_list      = ../config/data/StructSeg/test_label.txt
+support_image_list    = ../config/data/StructSeg/valid_image.txt
+support_label_list    = ../config/data/StructSeg/valid_label.txt
+label_wanted_ls       = [1,6,7,8]
+multi_run_ensemble_num = 15
+fine_detection        = True
 patch_size            = [16,64,64]
-class_num             = 3
 
 [coarse_pnetwork]
 net_type                = Pnet
@@ -24,5 +24,5 @@ distance_ratio          = 300
 
 [testing]
 load_weight        = True
-coarse_pnet_load_path = /home/ps/leiwenhui/Code/RPR-Loc-main/weights/Pnet/Pnet_16_han_coarse_382.47344970703125.pkl
-fine_pnet_load_path   = /home/ps/leiwenhui/Code/RPR-Loc-main/weights/Pnet/Pnet_16_han_coarse_382.47344970703125.pkl
+coarse_pnet_load_path = ../weights/Pnet/
+fine_pnet_load_path   = ../weights/Pnet/

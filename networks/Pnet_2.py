@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import torch as t
 import numpy as np
 import torch.nn as nn
-from networks.layers import TribleResConv3D
+from networks.layers import DoubleResConv3D
 import torch.nn.functional as F
 
 
@@ -20,15 +20,15 @@ class Pnet_2(nn.Module):
         self.dropout = nn.Dropout(droprate)
         self.downsample = nn.MaxPool3d(2, 2)
 
-        self.conv1 = TribleResConv3D(inc, 2*base_chns, norm=norm, depth=depth)
+        self.conv1 = DoubleResConv3D(inc, 2*base_chns, norm=norm, depth=depth)
 
-        self.conv2 = TribleResConv3D(2*base_chns, 2 * base_chns, norm=norm, depth=depth)
+        self.conv2 = DoubleResConv3D(2*base_chns, 2 * base_chns, norm=norm, depth=depth)
 
-        self.conv3 = TribleResConv3D(2 * base_chns, 4 * base_chns, norm=norm, depth=depth)
+        self.conv3 = DoubleResConv3D(2 * base_chns, 4 * base_chns, norm=norm, depth=depth)
 
 
-        self.conv4 = TribleResConv3D(4 * base_chns, 8 * base_chns, norm=norm, depth=depth)
-        self.conv5 = TribleResConv3D(8 * base_chns, 4 * base_chns, norm=norm, depth=depth)
+        self.conv4 = DoubleResConv3D(4 * base_chns, 8 * base_chns, norm=norm, depth=depth)
+        self.conv5 = DoubleResConv3D(8 * base_chns, 4 * base_chns, norm=norm, depth=depth)
         fc_inc = int(np.asarray(patch_size).prod()/512)*4*base_chns
         self.fc1 = nn.Linear(fc_inc, 8 * base_chns)
         self.fc2 = nn.Linear(8 * base_chns, 4 * base_chns)

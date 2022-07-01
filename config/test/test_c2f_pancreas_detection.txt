@@ -1,0 +1,29 @@
+[data]
+query_image_list      = /home/ps/leiwenhui/Code/RPR-Loc-main/config/data/TCIA-Pancreas/test_image.txt
+query_label_list      = /home/ps/leiwenhui/Code/RPR-Loc-main/config/data/TCIA-Pancreas/test_label.txt
+support_image_list    = /home/ps/leiwenhui/Code/RPR-Loc-main/config/data/TCIA-Pancreas/valid_image.txt
+support_label_list    = /home/ps/leiwenhui/Code/RPR-Loc-main/config/data/TCIA-Pancreas/valid_label.txt
+organ_wanted          = [1]
+iter_num              = 4000
+batch_size            = 1
+patch_size            = [48,48,48]
+class_num             = 3
+
+[coarse_pnetwork]
+net_type                = Pnet_2
+base_feature_number     = 24
+class_num               = 3
+input_channel           = 1
+distance_ratio          = 700
+
+[fine_pnetwork]
+net_type                = Pnet_2
+base_feature_number     = 24
+class_num               = 3
+input_channel           = 1
+distance_ratio          = 50
+
+[testing]
+load_weight        = True
+coarse_pnet_load_path = /home/ps/leiwenhui/Code/RPR-Loc-main/weights/Pnet_2/Pnet_2_24_panc_coarse_78.36519622802734.pkl
+fine_pnet_load_path   = /home/ps/leiwenhui/Code/RPR-Loc-main/weights/Pnet_2/Pnet_2_24_panc_fine_50_fluct_15_13.056147575378418.pkl

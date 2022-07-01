@@ -7,7 +7,7 @@ You could download the processed dataset from: [StructSeg](https://structseg2019
 The training config is in `config/train/`, containing 4 files for coarse/fine & pancreas/head and neck dataset. You could change the parameters for your own experiments. More details could be found in `config/train/readme.md`.
 
 For example, you could `cd train` then run `python train_position.py ../config/train/train_position_pancreas_coarse.txt` to train a coarse RPR model for TCIA-Pancreas dataset.
-# Pre-trained models
+### Pre-trained models
 We provide the pre-trained Pnet_2 model for TCIA-Pancreas dataset. You could download the coarse model from [Google Drive](https://drive.google.com/file/d/1AXo8XP03id3zE4d6hGUuyaU5DUWeFUM4/view?usp=sharing) and the fine model from [Google Drive](https://drive.google.com/file/d/1AXo8XP03id3zE4d6hGUuyaU5DUWeFUM4/view?usp=sharing). Both two models shoud be saved in `weights/Pnet_2/`.
 ##Detection
 For example, you could 'cd detection' then run 'python c2f_detection.py ../config/test/test_c2f_pancreas_detection.txt' for pancreas detection (the default setting requires the pre-trained models). You could change the parameters for your own experiments. More details could be found in `config/test/readme.md`.

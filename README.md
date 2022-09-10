@@ -11,7 +11,8 @@ For example, you could `cd train` then run `python train_position.py ../config/t
 We provide the pre-trained Pnet_2 model for TCIA-Pancreas dataset. You could download the coarse model from [Google Drive](https://drive.google.com/file/d/1AXo8XP03id3zE4d6hGUuyaU5DUWeFUM4/view?usp=sharing) and the fine model from [Google Drive](https://drive.google.com/file/d/1r2JTS72TSv8pkzrW3ESGiedTY6_2-NNY/view?usp=sharing). Both two models shoud be saved in `weights/Pnet_2/`.
 ## Detection
 For example, you could `cd detection` then run `python c2f_detection.py ../config/test/test_c2f_pancreas_detection.txt` for pancreas detection (the default setting requires the pre-trained models). You could change the parameters in configuration txt for your own experiments. More details could be found in `config/test/readme.md`.
-
+### Performance
+We have fixed a bug in our original framework and increase the detection IOU of pancreas from **0.495** in the paper to **0.58**.
 ## Citation
 If you find this research useful, please consider citing our work:
 
